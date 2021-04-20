@@ -36,23 +36,33 @@
     <open-data type="userAvatarUrl"></open-data>
   </view>
   <view>欢迎！<open-data type="userNickName"></open-data></view>
-  <view class="page-section">
+  <block wx:if="{{!logged}}">
+    <view>您还未登陆</view>
+  </block>
+  
+  <view hidden="{{!logged}}">您已作为用户{{userName}}登陆</view>
+  <view hidden="{{logged}}" class="page-section">
     <view class="weui-cells__title"></view>
     <view class="weui-cells weui-cells_after-title">
       <view class="weui-cell weui-cell_input">
-        <input class="weui-input" placeholder="请输入用户名"/>
+        <input bindinput="userNameInput" class="weui-input" placeholder="请输入用户名"/>
       </view>
     </view>
   </view>
-  <view class="page-section">
+  <view hidden="{{logged}}" class="page-section">
     <view class="weui-cells__title"></view>
     <view class="weui-cells weui-cells_after-title">
       <view class="weui-cell weui-cell_input">
-        <input class="weui-input" placeholder="请输入密码"/>
+        <input password="true" bindinput="passwordInput" class="weui-input" placeholder="请输入密码"/>
       </view>
     </view>
   </view>
-  <view class="page-section">
+
+  <view hidden="{{logged}}" style="margin-top:20px" class="page-section">
+    <button plain="true" type="primary" bindtap="login">登陆</button>
+  </view>
+
+  <view hidden="{{!logged}}" class="page-section">
     <view class="weui-cells__title">请选择借出设备</view>
     <view class="weui-cells weui-cells_after-title">
       <view class="weui-cell weui-cell_input">
@@ -67,24 +77,24 @@
   </view>
 
   <!-- 上传图片 -->
-  <view class="uploader">
+  <view hidden="{{!logged}}" class="uploader">
     <view class="uploader-text" bindtap="doUpload">
-      <text>上传照片</text>
+      <text>进行人脸识别</text>
     </view>
     <view class="uploader-container" wx:if="{{imgUrl}}">
       <image class="uploader-image" src="{{imgUrl}}" mode="aspectFit" bindtap="previewImg"></image>
     </view>
   </view>
 
-  <view class="page-section">
-    <button type="default" >按钮</button>
+  <view hidden="{{!logged}}" style="margin-top:20px" class="page-section">
+    <button plain="true" type="primary" bindtap="confirm">确认登记</button>
   </view>
 
-  <view class="uploader">
+  <!-- <view class="uploader">
     <view class="uploader-text" bindtap="doDownload">
       <text>下载图片</text>
     </view>
-  </view>
+  </view> -->
 
 
   <!-- 操作数据库 -->

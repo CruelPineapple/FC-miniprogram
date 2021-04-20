@@ -7,6 +7,8 @@ Page({
     userInfo: {},
     hasUserInfo: false,
     logged: false,
+    userName:"",
+    password:"",
     getOpdnid: false,
     openid: "",
     array: [ '无','鸡毛掸子', '垃圾桶', '晾衣杆'],
@@ -45,10 +47,68 @@ Page({
       },
       fail: err => {
         console.error('[云函数] [login] 调用失败', err)
-        wx.navigateTo({
-          url: '../deployFunctions/deployFunctions',
-        })
+        // wx.navigateTo({
+        //   url: '../deployFunctions/deployFunctions',
+        // })
       }
+    })
+  },
+
+  userNameInput: function(e){
+    this.setData({
+      userName:e.detail.value
+    })
+  },
+
+  passwordInput: function(e){
+    this.setData({
+      password:e.detail.value
+    })
+  },
+
+  login: function(){
+    if(this.data.userName==""){
+      wx.showToast({
+        title: '用户名不能为空',
+        icon: 'error',
+        duration: 2000
+      })
+      return;
+    }
+    if(this.data.password==""){
+      wx.showToast({
+        title: '密码不能为空',
+        icon: 'error',
+        duration: 2000
+      })
+      return;
+    }
+    wx.showToast({
+      title: '登陆中',
+      icon: 'loading',
+      duration: 500
+    })
+    setTimeout(()=>{
+      this.setData({
+        logged:true
+      })
+    },1000)
+
+  },
+
+  confirm: function(){
+    if(this.data.index==0){
+      wx.showToast({
+        title: '尚未选择',
+        icon: 'error',
+        duration: 2000
+      })
+      return;
+    }
+    wx.showToast({
+      title: '登记成功',
+      icon: 'success',
+      duration: 2000
     })
   },
 
@@ -129,7 +189,7 @@ Page({
     wx.chooseImage({
       count: 1,
       sizeType: ['compressed'],
-      sourceType: ['album', 'camera'],
+      sourceType: ['camera'],
       success: function (res) {
         wx.showLoading({
           title: '上传中',
@@ -144,14 +204,18 @@ Page({
           filePath,
           success: res => {
             console.log('[上传文件] 成功：', res)
-
+            wx.showToast({
+              title: '上传成功',
+              icon: 'success',
+              duration: 2000
+            })
             app.globalData.fileID = res.fileID
             app.globalData.cloudPath = cloudPath
             app.globalData.imagePath = filePath
             
-            wx.navigateTo({
-              url: '../storageConsole/storageConsole'
-            })
+            // wx.navigateTo({
+            //   url: '../storageConsole/storageConsole'
+            // })
           },
           fail: e => {
             console.error('[上传文件] 失败：', e)
